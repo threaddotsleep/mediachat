@@ -1,0 +1,15 @@
+{
+  "name": "mediachat",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "busboy": "^1.6.0",
+    "dotenv": "^18.0.8",
+    "maxmind": "^5.0.7",
+    "sharp": "^0.35.5"
+  }
+}

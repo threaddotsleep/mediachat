@@ -4,6 +4,10 @@
 
 Install dependencies with `npm install`, copy `.env.example` to `.env`, configure the values you need, then run `npm start`. The server loads `.env` automatically and defaults to `http://127.0.0.1:3000`.
 
+## Tests
+
+Run the unit tests with `npm test`.
+
 ## Submission CAPTCHA
 
 Uploads and comments require Cloudflare Turnstile verification. Create a Turnstile widget for the hostnames where the app will run, then configure both keys before starting the server:

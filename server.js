@@ -12,6 +12,7 @@ import { pipeline } from "node:stream/promises";
 import busboy from "busboy";
 import maxmind from "maxmind";
 import sharp from "sharp";
+import { getClientIp, isPrivateAddress } from "./network.js";
 
 const port = Number(process.env.PORT ?? 3000);
 const turnstileSiteKey = process.env.TURNSTILE_SITE_KEY?.trim() ?? "";
@@ -117,7 +118,7 @@ async function requireValidCaptcha(token, expectedAction, request, response) {
         secret: turnstileSecretKey,
         response: token
     });
-    const clientIp = getClientIp(request);
+    const clientIp = getClientIp(request, trustedProxyHops);
     if (isIP(clientIp)) verificationData.set("remoteip", clientIp);
 
     try {
@@ -139,21 +140,10 @@ async function requireValidCaptcha(token, expectedAction, request, response) {
     }
 }
 
-function getClientIp(request) {
-    const remoteAddress = request.socket.remoteAddress?.replace(/^::ffff:/i, "") ?? "unknown";
-    if (trustedProxyHops === 0) return remoteAddress;
-
-    const forwarded = request.headers["x-forwarded-for"];
-    if (typeof forwarded !== "string") return remoteAddress;
-    const addresses = forwarded.split(",").map((address) => address.trim().replace(/^::ffff:/i, ""));
-    const forwardedClient = addresses[addresses.length - trustedProxyHops];
-    return forwardedClient && isIP(forwardedClient) ? forwardedClient : remoteAddress;
-}
-
 function appendAuditEvent(request, event) {
     const record = {
         ...event,
-        ipAddress: getClientIp(request),
+        ipAddress: getClientIp(request, trustedProxyHops),
         timestampUtc: new Date().toISOString()
     };
     const write = auditQueue.then(() => appendFile(auditLogPath, `${JSON.stringify(record)}\n`, {
@@ -164,12 +154,6 @@ function appendAuditEvent(request, event) {
         console.error("Failed to write content audit log:", error);
     });
     return write;
-}
-
-function isPrivateAddress(address) {
-    return address === "::1" || address.startsWith("127.") || address.startsWith("10.") ||
-        address.startsWith("192.168.") || /^172\.(1[6-9]|2\d|3[01])\./.test(address) ||
-        address.startsWith("fc") || address.startsWith("fd") || address.startsWith("fe80:");
 }
 
 function checkAnonymousIp(address) {
@@ -505,7 +489,7 @@ function receiveMedia(request, category) {
 await enforceUploadLimit();
 
 const server = createServer(async (request, response) => {
-    const clientIp = getClientIp(request);
+    const clientIp = getClientIp(request, trustedProxyHops);
     if (anonymousIpBlockingEnabled) {
         try {
             const blockedReason = checkAnonymousIp(clientIp);
@@ -687,7 +671,7 @@ const server = createServer(async (request, response) => {
                 sendJson(response, 400, { error: "Vote must be either +1 or -1." });
                 return;
             }
-            const result = await castVote(voteRoute[1], body.delta, getClientIp(request));
+            const result = await castVote(voteRoute[1], body.delta, getClientIp(request, trustedProxyHops));
             if (result.missing) {
                 sendJson(response, 404, { error: "Media not found." });
                 return;

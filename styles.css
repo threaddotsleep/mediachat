@@ -33,7 +33,7 @@
             color: #f7fbf8;
         }
 
-        .topbar-inner, main, footer {
+        .topbar-inner, main, .about-section, footer {
             width: min(1180px, calc(100% - 48px));
             margin: 0 auto;
         }
@@ -151,6 +151,7 @@
         }
 
         .upload-copy { display: flex; align-items: center; gap: 15px; min-width: 0; }
+        .upload-copy > div { min-width: 0; }
 
         .upload-icon {
             display: grid;
@@ -168,7 +169,7 @@
         .upload-copy h2 { margin: 0 0 4px; font-size: 15px; }
         .upload-copy p { overflow: hidden; margin: 0; color: var(--muted); font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
 
-        .upload-actions { display: flex; flex: 0 0 auto; flex-wrap: wrap; align-items: center; gap: 14px; }
+        .upload-actions { display: flex; flex: 0 1 430px; flex-wrap: wrap; align-items: center; gap: 14px; min-width: 0; }
         .captcha-widget { display: flex; min-height: 65px; flex-basis: 100%; align-items: center; }
         .captcha-widget:empty { min-height: 0; }
         .captcha-widget-message { color: var(--accent-dark); font-size: 11px; }
@@ -194,7 +195,7 @@
         .upload-button:disabled { cursor: wait; opacity: .68; transform: none; }
         .upload-button svg { width: 16px; height: 16px; }
         .upload-button[hidden] { display: none; }
-        .format-note { color: var(--muted); font-size: 11px; white-space: nowrap; }
+        .format-note { color: var(--muted); font-size: 11px; white-space: normal; }
 
         .feed-toolbar {
             display: flex;
@@ -361,6 +362,15 @@
         .comment-meta time { color: var(--muted); font-size: 10px; }
         .comment-text { margin: 0; color: #34443b; font-size: 13px; line-height: 1.55; white-space: pre-wrap; overflow-wrap: anywhere; }
 
+        .about-section { margin-top: 68px; margin-bottom: 30px; padding: 38px 0 42px; border-top: 1px solid var(--line); scroll-margin-top: 24px; }
+        .about-heading { max-width: 760px; margin-bottom: 32px; }
+        .about-heading h2 { max-width: 650px; margin: 0 0 12px; font-family: "Space Grotesk", sans-serif; font-size: 25px; line-height: 1.2; }
+        .about-heading > p:last-child { max-width: 680px; margin: 0; color: var(--muted); font-size: 14px; line-height: 1.6; }
+        .about-documents { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; }
+        .about-documents article { min-width: 0; padding-top: 16px; border-top: 2px solid #cbded1; scroll-margin-top: 24px; }
+        .about-documents h3 { margin: 0 0 12px; font-family: "Space Grotesk", sans-serif; font-size: 16px; }
+        .about-documents p { margin: 0 0 11px; color: #394a40; font-size: 12px; line-height: 1.65; }
+
         footer {
             display: flex;
             justify-content: space-between;
@@ -386,17 +396,15 @@
 
         @media (max-width: 640px) {
             .topbar { height: 58px; }
-            .topbar-inner, main, footer { width: min(100% - 32px, 540px); }
-            .topnav { gap: 16px; }
-            .topnav a { font-size: 12px; }
-            .topnav a:last-child { display: none; }
+            .topbar-inner, main, .about-section, footer { width: min(100% - 32px, 540px); }
+            .topnav { gap: 12px; }
+            .topnav a { font-size: 11px; }
             main { padding: 32px 0 44px; }
             .intro { align-items: start; flex-direction: column; gap: 16px; margin-bottom: 20px; }
             h1 { font-size: 29px; }
             .live-count { padding: 8px 10px; }
             .upload-panel { align-items: stretch; flex-direction: column; gap: 17px; margin-bottom: 25px; padding: 17px; }
-            .upload-copy > div { min-width: 0; }
-            .upload-actions { flex-wrap: wrap; justify-content: flex-start; }
+            .upload-actions { flex: 0 1 auto; flex-wrap: wrap; justify-content: flex-start; }
             .format-note { flex-basis: 100%; white-space: normal; }
             .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 11px; }
             .tile-meta { min-height: 39px; padding: 0 9px; }
@@ -407,6 +415,10 @@
             .feed-title h2 { font-size: 15px; }
             .sort-tabs { gap: 0; }
             .sort-tabs button { padding: 0 8px; font-size: 11px; }
+            .about-section { margin-top: 42px; padding: 28px 0 32px; }
+            .about-heading { margin-bottom: 24px; }
+            .about-heading h2 { font-size: 22px; }
+            .about-documents { grid-template-columns: 1fr; gap: 25px; }
             footer { gap: 12px; }
         }
 

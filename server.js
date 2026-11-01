@@ -41,10 +41,7 @@ const outputDirectory = process.env.MEDIA_DIRECTORY
     : fileURLToPath(new URL("./converted/", import.meta.url));
 const maximumUploads = 100;
 const categories = [
-    { id: "general", name: "General" },
-    { id: "asian", name: "Asian" },
-    { id: "ebony", name: "Ebony" },
-    { id: "latina", name: "Latina" }
+    { id: "general", name: "General" }
 ];
 const categoriesById = new Map(categories.map((category) => [category.id, category]));
 const voteHashSecretPath = join(outputDirectory, ".vote-hash-secret");
